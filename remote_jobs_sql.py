@@ -18,7 +18,7 @@ warnings.filterwarnings('ignore')
 opt = Options();
 opt.add_argument("headless");
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=opt)
-url_base= 'https://www.indeed.com/jobs?l=remote&explvl=entry_level&fromage=7'
+url_base= 'https://www.indeed.com/jobs?q=sql&l=remote&explvl=entry_level&fromage=7'
 driver.get(url_base)
 driver.implicitly_wait(0.5)
 job_count = driver.find_element(By.ID, "searchCountPages")
@@ -81,6 +81,6 @@ for i in range(df.shape[0]):
     line = '<li><a href="{}">{}: {}</a></li>'.format(df.loc[i,'job_link'], df.loc[i,'company'], df.loc[i,'title'])
     html += line
 html+=html_end
-file_name = "remote_jobs_{}.html".format(str(date.today()).replace('-',''))
+file_name = "remote_jobs_sql_{}.html".format(str(date.today()).replace('-',''))
 with open(file_name,'w') as file:
     file.write(html)

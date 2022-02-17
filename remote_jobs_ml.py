@@ -1,64 +1,38 @@
 #importing what is needed
-from datetime import date
 import time
 import pandas as pd
 import requests
 import json5
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import Select
-from webdriver_manager.chrome import ChromeDriverManager
 
-# hide warnings
-import warnings
-warnings.filterwarnings('ignore')
-opt = Options();
-opt.add_argument("headless");
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=opt)
-url_base= 'https://www.indeed.com/jobs?q=machine%20learning&l=remote&explvl=entry_level&fromage=7'
-driver.get(url_base)
-driver.implicitly_wait(0.5)
-job_count = driver.find_element(By.ID, "searchCountPages")
-job_count = job_count.text
-job_count = job_count[job_count.find('of')+3:job_count.find('jobs')-1]
-loc = job_count.find(',')
-while loc != -1:
-    job_count = job_count.replace(',','')
-    loc = job_count.find(',')
-job_count = int(job_count)
-driver.quit()
+url_base = 'https://www.indeed.com/jobs?q=machine%20learning&l=remote&explvl=entry_level&fromage=1&limit=50'
 jobs = []
-for pg in range(min(job_count//50+1,4)):
-    err_count = 0
-    url = url_base+'&start={}&limit=50'.format(pg*50)
-    r = requests.get(url)
-    while r.status_code != 200 and err_count < 5:
-        time.sleep(5)
-        err_count += 1
-        r = requests.get(url)
-    for i in range(50):
-        start = r.text.find('jobmap[{}]'.format(i))
-        if start==-1:
-            continue
-        end = r.text.find('jobmap[{}]'.format(i+1))
-        s = r.text.find('{',start)
-        e = r.text.find('}',s)+1
-        job = r.text[s:e]
-        p = job.find(': ')
-        while p != -1:
-            job = job.replace(': ',':')
-            p = job.find(': ')
-        job = json5.loads(job)
-        jobs.append(job)
+err_count = 0
+r = requests.get(url_base)
+while r.status_code!=200 and err_count < 5:
     time.sleep(5)
+    err_count = err_count + 1
+    r = requests.get(url_base)
+if err_count==5:
+    quit()
+text = r.text
+for i in range(text.count('jobmap[')):
+    start = text.find('jobmap[{}]'.format(i))
+    if start==-1:
+        continue
+    end = text.find('jobmap[{}]'.format(i+1))
+    s = text.find('{',start)
+    if end == -1:
+        e = text.find('}',s)
+    else:
+        e = text.rfind('}',s,end)
+    job = json5.loads(text[s:e+1])
+    jobs.append(job)
+
 df = pd.DataFrame(jobs)
 df.drop_duplicates(inplace=True)
 df['job_link']='https://www.indeed.com/viewjob?jk='+df.jk
 df.rename(columns={'cmp':'company'},inplace=True)
-df = df[df['country']=="US"].copy()
+df = df[(df['country']=="US")&(df["loc"]=="Remote")].copy()
 df = df[['title','company','job_link']].copy()
 html = """
 <!DOCTYPE html>

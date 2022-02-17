@@ -3,6 +3,7 @@ import time
 import pandas as pd
 import requests
 import json5
+import date
 
 url_base = 'https://www.indeed.com/jobs?q=machine%20learning&l=remote&explvl=entry_level&fromage=1&limit=50'
 jobs = []

@@ -35,6 +35,7 @@ df['job_link']='https://www.indeed.com/viewjob?jk='+df.jk
 df.rename(columns={'cmp':'company'},inplace=True)
 df = df[(df['country']=="US")&(df["loc"]=="Remote")].copy()
 df = df[['title','company','job_link']].copy()
+df.reset_index(inplace=True)
 html = """
 <!DOCTYPE html>
 <html>

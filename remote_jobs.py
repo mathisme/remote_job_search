@@ -14,6 +14,7 @@ while r.status_code!=200 and err_count < 5:
     err_count = err_count + 1
     r = requests.get(url_base)
 if err_count==5:
+    time.sleep(5)
     quit()
 text = r.text
 for i in range(text.count('jobmap[')):
@@ -28,7 +29,7 @@ for i in range(text.count('jobmap[')):
         e = text.rfind('}',s,end)
     job = json5.loads(text[s:e+1])
     jobs.append(job)
-
+time.sleep(5)
 df = pd.DataFrame(jobs)
 df.drop_duplicates(inplace=True)
 df['job_link']='https://www.indeed.com/viewjob?jk='+df.jk
@@ -60,3 +61,4 @@ html+=html_end
 file_name = "remote_jobs_{}.html".format(str(date.today()).replace('-',''))
 with open(file_name,'w') as file:
     file.write(html)
+

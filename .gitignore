@@ -1,2 +1,4 @@
 *.html
 .ipynb_checkpoints/**
+notes.txt
+*.ipynb

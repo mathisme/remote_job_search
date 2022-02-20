@@ -5,9 +5,8 @@ import requests
 import json5
 from datetime import date
 
-url_base= 'https://www.indeed.com/jobs?q=sql&l=remote&explvl=entry_level&fromage=1&limit=50'
+url_base = 'https://www.indeed.com/jobs?q=analyst&l=remote&explvl=entry_level&fromage=1&limit=50'
 jobs = []
-
 err_count = 0
 r = requests.get(url_base)
 while r.status_code!=200 and err_count < 5:
@@ -44,10 +43,10 @@ html = """
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Remote SQL jobs</title>
+  <title>Remote Analyst jobs</title>
 </head>
 <body>
-<h1>Remote SQL job listings</h1>
+<h1>Remote Analyst job listings</h1>
 <ul>
 """
 html_end = """
@@ -59,6 +58,6 @@ for i in range(df.shape[0]):
     line = '<li><a href="{}" target="_blank">{}: {}</a></li>'.format(df.loc[i,'job_link'], df.loc[i,'company'], df.loc[i,'title'])
     html += line
 html+=html_end
-file_name = "remote_jobs_sql_{}.html".format(str(date.today()).replace('-',''))
+file_name = "remote_jobs_analyst_{}.html".format(str(date.today()).replace('-',''))
 with open(file_name,'w') as file:
     file.write(html)

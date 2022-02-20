@@ -43,10 +43,10 @@ html = """
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Remote jobs</title>
+  <title>Remote ML jobs</title>
 </head>
 <body>
-<h1>Remote job listings</h1>
+<h1>Remote ML job listings</h1>
 <ul>
 """
 html_end = """
@@ -55,7 +55,7 @@ html_end = """
 </html>
 """
 for i in range(df.shape[0]):
-    line = '<li><a href="{}">{}: {}</a></li>'.format(df.loc[i,'job_link'], df.loc[i,'company'], df.loc[i,'title'])
+    line = '<li><a href="{}" target="_blank">{}: {}</a></li>'.format(df.loc[i,'job_link'], df.loc[i,'company'], df.loc[i,'title'])
     html += line
 html+=html_end
 file_name = "remote_jobs_ml_{}.html".format(str(date.today()).replace('-',''))

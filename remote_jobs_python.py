@@ -56,7 +56,7 @@ html_end = """
 </html>
 """
 for i in range(df.shape[0]):
-    line = '<li><a href="{}">{}: {}</a></li>'.format(df.loc[i,'job_link'], df.loc[i,'company'], df.loc[i,'title'])
+    line = '<li><a href="{}" target="_blank">{}: {}</a></li>'.format(df.loc[i,'job_link'], df.loc[i,'company'], df.loc[i,'title'])
     html += line
 html+=html_end
 file_name = "remote_jobs_python_{}.html".format(str(date.today()).replace('-',''))

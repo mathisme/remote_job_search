@@ -46,7 +46,7 @@ html = """
   <title>Remote jobs</title>
 </head>
 <body>
-<h1>Remote job listings</h1>
+<h1>Remote Python job listings</h1>
 <ul>
 """
 html_end = """

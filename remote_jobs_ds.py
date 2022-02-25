@@ -30,6 +30,8 @@ for i in range(text.count('jobmap[')):
     job = json5.loads(text[s:e+1])
     jobs.append(job)
 time.sleep(5)
+if len(jobs)==0:
+    quit()
 df = pd.DataFrame(jobs)
 df.drop_duplicates(inplace=True)
 df['job_link']='https://www.indeed.com/viewjob?jk='+df.jk
